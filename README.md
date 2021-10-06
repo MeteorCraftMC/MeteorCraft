@@ -28,7 +28,7 @@
 
 ### Block
 
-- [ ] Moon Stone
+- [X] Moon Stone
 
 
 ### Item
