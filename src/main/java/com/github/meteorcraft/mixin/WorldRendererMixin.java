@@ -1,5 +1,6 @@
 package com.github.meteorcraft.mixin;
 
+import com.github.meteorcraft.MeteorWorlds;
 import com.mojang.blaze3d.platform.GlStateManager;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
@@ -26,6 +27,9 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
@@ -52,6 +56,22 @@ public abstract class WorldRendererMixin {
 
     @Shadow
     protected abstract void renderEndSky(MatrixStack matrices);
+
+    @Inject(method = "renderClouds(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/util/math/Matrix4f;FDDD)V", at = @At("HEAD"), cancellable = true)
+    public void renderClouds(MatrixStack matrices, Matrix4f matrix4f, float f, double d, double e, double g, CallbackInfo ci) {
+        assert client.world != null;
+        if (client.world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"))) {
+            ci.cancel();
+        }
+    }
+
+    @Inject(method = "renderClouds(Lnet/minecraft/client/render/BufferBuilder;DDDLnet/minecraft/util/math/Vec3d;)V", at = @At("HEAD"), cancellable = true)
+    public void renderClouds(BufferBuilder builder, double x, double y, double z, Vec3d color, CallbackInfo ci) {
+        assert client.world != null;
+        if (client.world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"))) {
+            ci.cancel();
+        }
+    }
 
     /**
      * @author WinCho
@@ -124,66 +144,42 @@ public abstract class WorldRendererMixin {
             matrices.multiply(Vec3f.POSITIVE_X.getDegreesQuaternion(this.world.getSkyAngle(f) * 360.0F));
             Matrix4f matrix4f3 = matrices.peek().getModel();
             t = 30.0F;
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
-            if (client.world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"))) {
-                t = 20.0F;
-                RenderSystem.setShaderTexture(0, new Identifier("meteorcraft:textures/environment/earth_phases.png"));
-                int u = this.world.getMoonPhase();
-                int v = u % 4;
-                int w = u / 4 % 2;
-                float x = (float) (v) / 4.0F;
-                p = (float) (w) / 2.0F;
-                q = (float) (v + 1) / 4.0F;
-                r = (float) (w + 1) / 2.0F;
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-                bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
-                bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
-                bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
-                bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
-                bufferBuilder.end();
-                BufferRenderer.draw(bufferBuilder);
-                RenderSystem.disableTexture();
-                float ab = this.world.method_23787(f) * s;
-                if (ab > 0.0F) {
-                    RenderSystem.setShaderColor(ab, ab, ab, ab);
-                    BackgroundRenderer.method_23792();
-                    this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
-                    runnable.run();
-                }
-            } else {
-                RenderSystem.setShaderTexture(0, SUN);
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-                bufferBuilder.vertex(matrix4f3, -t, 100.0F, -t).texture(0.0F, 0.0F).next();
-                bufferBuilder.vertex(matrix4f3, t, 100.0F, -t).texture(1.0F, 0.0F).next();
-                bufferBuilder.vertex(matrix4f3, t, 100.0F, t).texture(1.0F, 1.0F).next();
-                bufferBuilder.vertex(matrix4f3, -t, 100.0F, t).texture(0.0F, 1.0F).next();
-                bufferBuilder.end();
-                BufferRenderer.draw(bufferBuilder);
 
-                t = 20.0F;
-                RenderSystem.setShaderTexture(0, MOON_PHASES);
-                int u = this.world.getMoonPhase();
-                int v = u % 4;
-                int w = u / 4 % 2;
-                float x = (float) (v) / 4.0F;
-                p = (float) (w) / 2.0F;
-                q = (float) (v + 1) / 4.0F;
-                r = (float) (w + 1) / 2.0F;
-                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-                bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
-                bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
-                bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
-                bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
-                bufferBuilder.end();
-                BufferRenderer.draw(bufferBuilder);
-                RenderSystem.disableTexture();
-                float ab = this.world.method_23787(f) * s;
-                if (ab > 0.0F) {
-                    RenderSystem.setShaderColor(ab, ab, ab, ab);
-                    BackgroundRenderer.method_23792();
-                    this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
-                    runnable.run();
-                }
+            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShaderTexture(0, SUN);
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+            bufferBuilder.vertex(matrix4f3, -t, 100.0F, -t).texture(0.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f3, t, 100.0F, -t).texture(1.0F, 0.0F).next();
+            bufferBuilder.vertex(matrix4f3, t, 100.0F, t).texture(1.0F, 1.0F).next();
+            bufferBuilder.vertex(matrix4f3, -t, 100.0F, t).texture(0.0F, 1.0F).next();
+            bufferBuilder.end();
+            BufferRenderer.draw(bufferBuilder);
+
+            t = 20.0F;
+            if (MeteorWorlds.isMoon(world))
+                RenderSystem.setShaderTexture(0, new Identifier("meteorcraft:textures/environment/earth_phases.png"));
+            else RenderSystem.setShaderTexture(0, MOON_PHASES);
+            int u = this.world.getMoonPhase();
+            int v = u % 4;
+            int w = u / 4 % 2;
+            float x = (float) (v) / 4.0F;
+            p = (float) (w) / 2.0F;
+            q = (float) (v + 1) / 4.0F;
+            r = (float) (w + 1) / 2.0F;
+            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+            bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
+            bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
+            bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
+            bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
+            bufferBuilder.end();
+            BufferRenderer.draw(bufferBuilder);
+            RenderSystem.disableTexture();
+            float ab = this.world.method_23787(f) * s;
+            if (ab > 0.0F) {
+                RenderSystem.setShaderColor(ab, ab, ab, ab);
+                BackgroundRenderer.method_23792();
+                this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
+                runnable.run();
             }
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

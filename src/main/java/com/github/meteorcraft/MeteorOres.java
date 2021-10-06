@@ -41,6 +41,7 @@ public class MeteorOres {
         RegistryKey<ConfiguredFeature<?, ?>> configuredFeatureRegistryKey = RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY,
                 new Identifier("meteorcraft", id));
         Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, configuredFeatureRegistryKey.getValue(), repeat);
+        //noinspection deprecation
         BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.UNDERGROUND_ORES, configuredFeatureRegistryKey);
         return repeat;
     }

@@ -4,6 +4,7 @@
   "package": "com.github.meteorcraft.mixin",
   "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "PlayerEntityMixin"
   ],
   "client": [
     "WorldRendererMixin"

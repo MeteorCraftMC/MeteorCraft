@@ -4,9 +4,15 @@
   "version": "${version}",
 
   "name": "Meteor Craft",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "description": "Fabric 1.17.x Space Mod!",
   "authors": [
-    "WinCho"
+    "Meteor Craft Team."
+  ],
+  "contributors": [
+    "",
+    "WinCho : Main Developer",
+    "myoung2 : Community Manager / Developer",
+    "ContentsApple : Texture Designer"
   ],
   "contact": {
     "homepage": "https://github.com/MeteorCraftMC/MeteorCraft",
@@ -21,6 +27,9 @@
   "entrypoints": {
     "main": [
       "com.github.meteorcraft.MeteorCraft"
+    ],
+    "client": [
+      "com.github.meteorcraft.client.MeteorCraftClient"
     ]
   },
   "mixins": [
@@ -35,5 +44,12 @@
   },
   "suggests": {
     "another-mod": "*"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.discord": "https://discord.gg/A4puvEnKDk"
+      }
+    }
   }
 }
