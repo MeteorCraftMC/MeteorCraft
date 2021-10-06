@@ -1,14 +1,8 @@
 {
   "scale": 0.05,
   "effects": {
-    "mood_sound": {
-      "sound": "minecraft:ambient.cave",
-      "tick_delay": 6000,
-      "block_search_extent": 8,
-      "offset": 2
-    },
     "sky_color": 0,
-    "fog_color": 14013909,
+    "fog_color": 0,
     "water_color": 8541136,
     "water_fog_color": 657242
   },

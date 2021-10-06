@@ -75,6 +75,7 @@ public abstract class WorldRendererMixin {
 
     /**
      * @author WinCho
+     * @reason Edit Moon Sky
      */
     @Overwrite
     public void renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable) {
