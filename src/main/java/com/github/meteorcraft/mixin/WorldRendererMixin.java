@@ -58,6 +58,12 @@ public abstract class WorldRendererMixin {
      */
     @Overwrite
     public void renderSky(MatrixStack matrices, Matrix4f matrix4f, float f, Runnable runnable) {
+        assert this.client.world != null;
+        assert this.lightSkyBuffer != null;
+        assert this.client.player != null;
+        assert this.starsBuffer != null;
+        assert this.darkSkyBuffer != null;
+
         runnable.run();
         if (this.client.world.getSkyProperties().getSkyType() == SkyProperties.SkyType.END) {
             this.renderEndSky(matrices);
