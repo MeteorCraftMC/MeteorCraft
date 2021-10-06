@@ -10,7 +10,7 @@
 
 ### Ore
 
-- [ ] Tin
+- [X] Tin
 - [ ] Aluminum
 - [x] Iron (Vanila)
 - [x] Copper (Vanila)
@@ -18,7 +18,7 @@
 
 ### Ingot
 
-- [ ] Tin Ingot
+- [X] Tin Ingot
 - [ ] Aluminum Ingot
 - [ ] Steel Ingot
 
@@ -34,3 +34,12 @@
 ### Item
 
 - [ ] Rubber
+
+## Commit & Push Guide
+## Commit Message
+```
+* YYYY/MM/DD HH:MM
+[+] ADD
+[-] REMOVED
+[*] MODIFIED
+[!] To-Do
