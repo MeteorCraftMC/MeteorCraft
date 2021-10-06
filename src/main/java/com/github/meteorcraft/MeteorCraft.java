@@ -10,5 +10,6 @@ public class MeteorCraft implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		MeteorBlocks.call();
+		MeteorOres.call();
 	}
 }
