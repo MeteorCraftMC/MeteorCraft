@@ -26,25 +26,32 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Inject;
 
 @Mixin(WorldRenderer.class)
 public abstract class WorldRendererMixin {
-    @Shadow private ClientWorld world;
+    @Shadow
+    @Final
+    private static Identifier SUN;
+    @Shadow
+    @Final
+    private static Identifier MOON_PHASES;
+    @Shadow
+    private ClientWorld world;
+    @Shadow
+    @Nullable
+    private VertexBuffer darkSkyBuffer;
+    @Shadow
+    @Final
+    private MinecraftClient client;
+    @Shadow
+    @Nullable
+    private VertexBuffer starsBuffer;
+    @Shadow
+    @Nullable
+    private VertexBuffer lightSkyBuffer;
 
-    @Shadow @Nullable private VertexBuffer darkSkyBuffer;
-
-    @Shadow @Final private MinecraftClient client;
-
-    @Shadow @Nullable private VertexBuffer starsBuffer;
-
-    @Shadow protected abstract void renderEndSky(MatrixStack matrices);
-
-    @Shadow @Nullable private VertexBuffer lightSkyBuffer;
-
-    @Shadow @Final private static Identifier SUN;
-
-    @Shadow @Final private static Identifier MOON_PHASES;
+    @Shadow
+    protected abstract void renderEndSky(MatrixStack matrices);
 
     /**
      * @author WinCho
@@ -57,9 +64,9 @@ public abstract class WorldRendererMixin {
         } else if (this.client.world.getSkyProperties().getSkyType() == SkyProperties.SkyType.NORMAL) {
             RenderSystem.disableTexture();
             Vec3d vec3d = this.world.method_23777(this.client.gameRenderer.getCamera().getPos(), f);
-            float g = (float)vec3d.x;
-            float h = (float)vec3d.y;
-            float i = (float)vec3d.z;
+            float g = (float) vec3d.x;
+            float h = (float) vec3d.y;
+            float i = (float) vec3d.z;
             BackgroundRenderer.setFogBlack();
             BufferBuilder bufferBuilder = Tessellator.getInstance().getBuffer();
             RenderSystem.depthMask(false);
@@ -90,8 +97,8 @@ public abstract class WorldRendererMixin {
                 bufferBuilder.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
                 bufferBuilder.vertex(matrix4f2, 0.0F, 100.0F, 0.0F).color(k, t, m, fs[3]).next();
 
-                for(int o = 0; o <= 16; ++o) {
-                    p = (float)o * 6.2831855F / 16.0F;
+                for (int o = 0; o <= 16; ++o) {
+                    p = (float) o * 6.2831855F / 16.0F;
                     q = MathHelper.sin(p);
                     r = MathHelper.cos(p);
                     bufferBuilder.vertex(matrix4f2, q * 120.0F, r * 120.0F, -r * 40.0F * fs[3]).color(fs[0], fs[1], fs[2], 0.0F).next();
@@ -113,39 +120,64 @@ public abstract class WorldRendererMixin {
             t = 30.0F;
             RenderSystem.setShader(GameRenderer::getPositionTexShader);
             if (client.world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"))) {
+                t = 20.0F;
+                RenderSystem.setShaderTexture(0, new Identifier("meteorcraft:textures/environment/earth_phases.png"));
+                int u = this.world.getMoonPhase();
+                int v = u % 4;
+                int w = u / 4 % 2;
+                float x = (float) (v) / 4.0F;
+                p = (float) (w) / 2.0F;
+                q = (float) (v + 1) / 4.0F;
+                r = (float) (w + 1) / 2.0F;
+                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
+                bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
+                bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
+                bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
+                RenderSystem.disableTexture();
+                float ab = this.world.method_23787(f) * s;
+                if (ab > 0.0F) {
+                    RenderSystem.setShaderColor(ab, ab, ab, ab);
+                    BackgroundRenderer.method_23792();
+                    this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
+                    runnable.run();
+                }
             } else {
                 RenderSystem.setShaderTexture(0, SUN);
-            }
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f3, -t, 100.0F, -t).texture(0.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f3, t, 100.0F, -t).texture(1.0F, 0.0F).next();
-            bufferBuilder.vertex(matrix4f3, t, 100.0F, t).texture(1.0F, 1.0F).next();
-            bufferBuilder.vertex(matrix4f3, -t, 100.0F, t).texture(0.0F, 1.0F).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
-            t = 20.0F;
-            RenderSystem.setShaderTexture(0, MOON_PHASES);
-            int u = this.world.getMoonPhase();
-            int v = u % 4;
-            int w = u / 4 % 2;
-            float x = (float)(v) / 4.0F;
-            p = (float)(w) / 2.0F;
-            q = (float)(v + 1) / 4.0F;
-            r = (float)(w + 1) / 2.0F;
-            bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
-            bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
-            bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
-            bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
-            bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
-            bufferBuilder.end();
-            BufferRenderer.draw(bufferBuilder);
-            RenderSystem.disableTexture();
-            float ab = this.world.method_23787(f) * s;
-            if (ab > 0.0F) {
-                RenderSystem.setShaderColor(ab, ab, ab, ab);
-                BackgroundRenderer.method_23792();
-                this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
-                runnable.run();
+                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex(matrix4f3, -t, 100.0F, -t).texture(0.0F, 0.0F).next();
+                bufferBuilder.vertex(matrix4f3, t, 100.0F, -t).texture(1.0F, 0.0F).next();
+                bufferBuilder.vertex(matrix4f3, t, 100.0F, t).texture(1.0F, 1.0F).next();
+                bufferBuilder.vertex(matrix4f3, -t, 100.0F, t).texture(0.0F, 1.0F).next();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
+
+                t = 20.0F;
+                RenderSystem.setShaderTexture(0, MOON_PHASES);
+                int u = this.world.getMoonPhase();
+                int v = u % 4;
+                int w = u / 4 % 2;
+                float x = (float) (v) / 4.0F;
+                p = (float) (w) / 2.0F;
+                q = (float) (v + 1) / 4.0F;
+                r = (float) (w + 1) / 2.0F;
+                bufferBuilder.begin(VertexFormat.DrawMode.QUADS, VertexFormats.POSITION_TEXTURE);
+                bufferBuilder.vertex(matrix4f3, -t, -100.0F, t).texture(q, r).next();
+                bufferBuilder.vertex(matrix4f3, t, -100.0F, t).texture(x, r).next();
+                bufferBuilder.vertex(matrix4f3, t, -100.0F, -t).texture(x, p).next();
+                bufferBuilder.vertex(matrix4f3, -t, -100.0F, -t).texture(q, p).next();
+                bufferBuilder.end();
+                BufferRenderer.draw(bufferBuilder);
+                RenderSystem.disableTexture();
+                float ab = this.world.method_23787(f) * s;
+                if (ab > 0.0F) {
+                    RenderSystem.setShaderColor(ab, ab, ab, ab);
+                    BackgroundRenderer.method_23792();
+                    this.starsBuffer.setShader(matrices.peek().getModel(), matrix4f, GameRenderer.getPositionShader());
+                    runnable.run();
+                }
             }
 
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);

@@ -9,8 +9,9 @@
     "WinCho"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/MeteorCraftMC/MeteorCraft",
+    "sources": "https://github.com/MeteorCraftMC/MeteorCraft",
+    "issues": "https://github.com/MeteorCraftMC/MeteorCraft/issues"
   },
 
   "license": "CC0-1.0",

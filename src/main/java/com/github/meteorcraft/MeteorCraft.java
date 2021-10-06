@@ -11,5 +11,6 @@ public class MeteorCraft implements ModInitializer {
 	public void onInitialize() {
 		MeteorBlocks.call();
 		MeteorOres.call();
+		MeteorItems.call();
 	}
 }
