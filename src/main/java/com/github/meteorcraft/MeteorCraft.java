@@ -12,5 +12,6 @@ public class MeteorCraft implements ModInitializer {
 		MeteorBlocks.call();
 		MeteorOres.call();
 		MeteorItems.call();
+		MeteorBlockEntityTypes.call();
 	}
 }
