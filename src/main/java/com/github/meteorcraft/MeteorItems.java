@@ -11,7 +11,7 @@ public class MeteorItems {
     private static final String MOD_ID = "meteorcraft";
     public static final Item RAW_TIN = register(new Identifier(MOD_ID, "raw_tin"), new Item(new FabricItemSettings().group(ItemGroup.MISC)));
     public static final Item TIN_INGOT = register(new Identifier(MOD_ID, "tin_ingot"), new Item(new FabricItemSettings().group(ItemGroup.MISC)));
-    public static final Item OXYGEN_TANK = register(new Identifier(MOD_ID, "oxygen_tank"), new OxygenTankItem(new FabricItemSettings().group(ItemGroup.MISC).maxDamage(1000)));
+    public static final Item OXYGEN_TANK = register(new Identifier(MOD_ID, "oxygen_tank"), new OxygenTankItem(new FabricItemSettings().group(ItemGroup.MISC).maxCount(1)));
 
     private static Item register(Identifier identifier, Item item) {
         Registry.register(Registry.ITEM, identifier, item);

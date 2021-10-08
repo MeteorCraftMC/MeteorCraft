@@ -16,13 +16,10 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import team.reborn.energy.api.base.SimpleBatteryItem;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity {
-    @Shadow
-    @Final
-    private PlayerInventory inventory;
-
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
@@ -30,12 +27,14 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     @Shadow
     public abstract boolean damage(DamageSource source, float amount);
 
+    @Shadow public abstract void addExhaustion(float exhaustion);
+
     @Inject(method = "tick", at = @At("HEAD"))
     public void tick(CallbackInfo ci) {
         if (MeteorWorlds.isMoon(world)) {
-            ItemStack stack = TrinketsApi.getTrinketComponent(this).orElseThrow().getInventory().get("chest").get("back").getStack(0);
-            if (!TrinketsApi.getTrinketComponent(this).orElseThrow().isEquipped(MeteorItems.OXYGEN_TANK) || stack.getDamage() >= stack.getMaxDamage() - 1) {
-                    damage(DamageSource.IN_WALL, 1);
+            ItemStack stack = TrinketsApi.getTrinketComponent(this).orElseThrow().getInventory().get("chest").get("tank").getStack(0);
+            if (!TrinketsApi.getTrinketComponent(this).orElseThrow().isEquipped(MeteorItems.OXYGEN_TANK) || SimpleBatteryItem.getStoredEnergyUnchecked(stack) == 0) {
+                damage(DamageSource.IN_WALL, 1);
             }
         }
     }

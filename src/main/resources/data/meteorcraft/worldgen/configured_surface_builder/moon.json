@@ -10,7 +10,7 @@
       "Name": "meteorcraft:moonstone"
     },
     "underwater_material": {
-      "Name": "meteorcraft:moonstone"
+      "Name": "minecraft:air"
     }
   },
   "type": "minecraft:default"
