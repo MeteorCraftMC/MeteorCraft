@@ -57,15 +57,17 @@ public class RocketScreen extends Screen {
     }
 
     private void move(String s) {
-        //TODO if is multiplayer, send packet  to server
-        MinecraftServer server = MinecraftClient.getInstance().world.getServer();
-        RegistryKey<World> key = null;
-        for (RegistryKey<World> worldRegistryKey : server.getWorldRegistryKeys()) {
-            if (worldRegistryKey.getValue().equals(new Identifier(s))) {
-                key = worldRegistryKey;
+        //TODO if is multiplayer, send packet to server
+        if (MinecraftClient.getInstance().world.isClient()) {
+            MinecraftServer server = MinecraftClient.getInstance().getServer();
+            RegistryKey<World> key = null;
+            for (RegistryKey<World> worldRegistryKey : server.getWorldRegistryKeys()) {
+                if (worldRegistryKey.getValue().equals(new Identifier(s))) {
+                    key = worldRegistryKey;
+                }
             }
+            server.getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).teleport(server.getWorld(key), 0, 100, 0, 0, 0);
         }
-        server.getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).teleport(server.getWorld(key), 0, 100, 0, 0, 0);
     }
 
     @Override
