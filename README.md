@@ -34,6 +34,7 @@
 ### Item
 
 - [ ] Rubber
+- [ ] Rocket Item
 
 ### Entity
 
