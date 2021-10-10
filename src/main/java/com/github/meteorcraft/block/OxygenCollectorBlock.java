@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
 
-    private static HashMap<BlockPos,OxygenCollectorBlockEntity> entities= new HashMap();
+    private static HashMap<BlockPos, OxygenCollectorBlockEntity> entities = new HashMap();
 
     public OxygenCollectorBlock(Settings settings) {
         super(settings);
@@ -30,12 +30,12 @@ public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
     @Nullable
     @Override
     public OxygenCollectorBlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        Pair<String,BlockState> pair = new Pair<>(pos.toShortString(),state);
+        Pair<String, BlockState> pair = new Pair<>(pos.toShortString(), state);
         if (entities.containsKey(pair)) {
             return entities.get(pair);
         } else {
-            var entity = new OxygenCollectorBlockEntity(pos,state);
-            entities.put(pos,entity);
+            var entity = new OxygenCollectorBlockEntity(pos, state);
+            entities.put(pos, entity);
             return entity;
         }
     }
@@ -47,25 +47,25 @@ public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
     @Override
     public void onPlaced(World world, BlockPos pos, BlockState state, @Nullable LivingEntity placer, ItemStack itemStack) {
         super.onPlaced(world, pos, state, placer, itemStack);
-        createBlockEntity(pos,state);
+        createBlockEntity(pos, state);
     }
 
     @Override
     public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         super.onBreak(world, pos, state, player);
-        removeBlockEntity(pos,state);
+        removeBlockEntity(pos, state);
     }
 
     @Override
     public void onBroken(WorldAccess world, BlockPos pos, BlockState state) {
         super.onBroken(world, pos, state);
-        removeBlockEntity(pos,state);
+        removeBlockEntity(pos, state);
     }
 
     @Override
     public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
-        EnergyStorage storage = EnergyStorage.SIDED.find(world,pos,player.getMovementDirection());
-        player.sendMessage(new LiteralText(String.valueOf(storage.getAmount())),false);
+        EnergyStorage storage = EnergyStorage.SIDED.find(world, pos, player.getMovementDirection());
+        player.sendMessage(new LiteralText(String.valueOf(storage.getAmount())), false);
         return ActionResult.PASS;
     }
 }
