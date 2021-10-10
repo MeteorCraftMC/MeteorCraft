@@ -4,5 +4,11 @@
   "block.meteorcraft.deepslate_tin_ore": "Deepslate Tin Ore",
   "item.meteorcraft.raw_tin": "Raw Tin",
   "item.meteorcraft.tin_ingot": "Tin Ingot",
-  "item.meteorcraft.oxygen_tank": "Oxygen Tank"
+  "item.meteorcraft.oxygen_tank": "Oxygen Tank",
+  "gui.meteorcraft.launch": "Launch",
+  "gui.meteorcraft.target": "Target: %s",
+  "gui.meteorcraft.none": "NONE",
+  "gui.meteorcraft.sun": "Sun",
+  "gui.meteorcraft.earth": "Earth",
+  "gui.meteorcraft.moon": "Moon"
 }

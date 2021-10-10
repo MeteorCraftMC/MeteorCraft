@@ -1,5 +1,7 @@
 package com.github.meteorcraft.screen;
 
+import com.github.meteorcraft.MeteorEntityTypes;
+import com.github.meteorcraft.entity.RocketEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.api.Environment;
 import net.fabricmc.loader.api.FabricLoader;
@@ -10,7 +12,10 @@ import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.text.LiteralText;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
@@ -39,7 +44,7 @@ public class RocketScreen extends Screen {
             type = PlanetType.MOON;
         }));
 
-        launchButton = addDrawableChild(new ButtonWidget(width - 105, height - 25, 100, 20, new LiteralText("Launch"), buttonWidget -> {
+        launchButton = addDrawableChild(new ButtonWidget(width - 105, height - 25, 100, 20, new TranslatableText("gui.meteorcraft.launch"), buttonWidget -> {
             switch (type) {
                 case NONE -> {
                 }
@@ -66,7 +71,14 @@ public class RocketScreen extends Screen {
                     key = worldRegistryKey;
                 }
             }
-            server.getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid()).teleport(server.getWorld(key), 0, 100, 0, 0, 0);
+            ServerWorld world = server.getWorld(key);
+            ServerPlayerEntity player = server.getPlayerManager().getPlayer(MinecraftClient.getInstance().player.getUuid());
+            player.teleport(world, 0, 5000, 0, 0, 0);
+            RocketEntity entity = MeteorEntityTypes.ROCKET_ENTITY.create(world);
+            entity.falling();
+            world.spawnEntity(entity);
+            entity.teleport(0, 5000, 0);
+            player.startRiding(entity);
         }
     }
 
@@ -83,20 +95,20 @@ public class RocketScreen extends Screen {
     public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
         renderBackground(matrices);
 
-        drawCenteredText(matrices, textRenderer, new LiteralText("Target: " + type.getName()), width / 2, height - 60, 0xFFFFFF);
+        drawCenteredText(matrices, textRenderer, new TranslatableText("gui.meteorcraft.target", type.getName()), width / 2, height - 60, 0xFFFFFF);
         super.render(matrices, mouseX, mouseY, delta);
     }
 
     public enum PlanetType {
-        NONE("NONE"), SUN("Sun"), EARTH("Earth"), MOON("Moon");
+        NONE("gui.meteorcraft.none"), SUN("gui.meteorcraft.sun"), EARTH("gui.meteorcraft.earth"), MOON("gui.meteorcraft.moon");
 
-        private final String name;
+        private final TranslatableText name;
 
         PlanetType(String name) {
-            this.name = name;
+            this.name = new TranslatableText(name);
         }
 
-        public String getName() {
+        public TranslatableText getName() {
             return name;
         }
     }
