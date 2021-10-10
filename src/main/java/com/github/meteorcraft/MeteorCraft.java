@@ -1,6 +1,7 @@
 package com.github.meteorcraft;
 
-import com.github.meteorcraft.entity.RocketEntity;
+import com.github.meteorcraft.entity.rocket.LanderEntity;
+import com.github.meteorcraft.entity.rocket.Tier1RocketEntity;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import org.apache.logging.log4j.LogManager;
@@ -17,6 +18,7 @@ public class MeteorCraft implements ModInitializer {
         MeteorBlockEntityTypes.call();
         MeteorEntityTypes.call();
         //noinspection ConstantConditions
-        FabricDefaultAttributeRegistry.register(MeteorEntityTypes.ROCKET_ENTITY, RocketEntity.createLivingAttributes());
+        FabricDefaultAttributeRegistry.register(MeteorEntityTypes.TIER_1_ROCKET_ENTITY, Tier1RocketEntity.createLivingAttributes());
+        FabricDefaultAttributeRegistry.register(MeteorEntityTypes.LANDER_ENTITY, LanderEntity.createLivingAttributes());
     }
 }

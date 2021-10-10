@@ -23,6 +23,11 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Objects;
 
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityMixin extends Entity {
@@ -39,6 +44,7 @@ public abstract class LivingEntityMixin extends Entity {
     @Shadow
     protected abstract boolean shouldSwimInFluids();
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     @Shadow
     public abstract boolean canWalkOnFluid(Fluid fluid);
 
@@ -72,6 +78,18 @@ public abstract class LivingEntityMixin extends Entity {
 
     @Shadow
     public abstract void updateLimbs(LivingEntity entity, boolean flutter);
+
+    @Shadow public abstract boolean removeStatusEffect(StatusEffect type);
+
+    @Inject(method = "tick", at = @At("RETURN"))
+    public void tick(CallbackInfo ci) {
+        if (getScoreboardTags().contains("slowfalling")) {
+            if (isOnGround()) {
+                removeStatusEffect(StatusEffects.SLOW_FALLING);
+                removeScoreboardTag("slowfalling");
+            }
+        }
+    }
 
     /**
      * @author WinCho
@@ -132,7 +150,7 @@ public abstract class LivingEntityMixin extends Entity {
                     vec3d = new Vec3d(vec3d.x, 0.2D, vec3d.z);
                 }
 
-                this.setVelocity(vec3d.multiply((double) j, 0.800000011920929D, (double) j));
+                this.setVelocity(vec3d.multiply(j, 0.800000011920929D, j));
                 Vec3d vec3d2 = this.method_26317(d, bl, this.getVelocity());
                 this.setVelocity(vec3d2);
                 if (this.horizontalCollision && this.doesNotCollide(vec3d2.x, vec3d2.y + 0.6000000238418579D - this.getY() + e, vec3d2.z)) {
@@ -210,9 +228,10 @@ public abstract class LivingEntityMixin extends Entity {
                 Vec3d vec3d7 = this.method_26318(movementInput, t);
                 double v = vec3d7.y;
                 if (this.hasStatusEffect(StatusEffects.LEVITATION)) {
-                    v += (0.05D * (double) (this.getStatusEffect(StatusEffects.LEVITATION).getAmplifier() + 1) - vec3d7.y) * 0.2D;
+                    v += (0.05D * (double) (Objects.requireNonNull(this.getStatusEffect(StatusEffects.LEVITATION)).getAmplifier() + 1) - vec3d7.y) * 0.2D;
                     this.fallDistance = 0.0F;
-                } else if (this.world.isClient && !this.world.isChunkLoaded(blockPos)) {
+                } else //noinspection deprecation
+                    if (this.world.isClient && !this.world.isChunkLoaded(blockPos)) {
                     if (this.getY() > (double) this.world.getBottomY()) {
                         v = -0.1D;
                     } else {

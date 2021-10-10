@@ -1,32 +1,32 @@
-package com.github.meteorcraft.entity.renderer;
+package com.github.meteorcraft.entity.rocket.renderer;
 
-import com.github.meteorcraft.entity.RocketEntity;
-import com.github.meteorcraft.entity.model.RocketEntityModel;
-import com.mojang.datafixers.util.Pair;
+import com.github.meteorcraft.entity.rocket.AbstractRocketEntity;
+import com.github.meteorcraft.entity.rocket.model.RocketEntityModel;
 import net.minecraft.client.render.OverlayTexture;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.EntityRenderer;
 import net.minecraft.client.render.entity.EntityRendererFactory;
+import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3f;
 
-public class RocketEntityRenderer extends EntityRenderer<RocketEntity> {
+public class RocketEntityRenderer extends EntityRenderer<AbstractRocketEntity> {
     private final RocketEntityModel model;
 
-    public RocketEntityRenderer(EntityRendererFactory.Context context) {
+    public RocketEntityRenderer(EntityRendererFactory.Context context, EntityModelLayer layer) {
         super(context);
-        model = new RocketEntityModel(context.getPart(RocketEntity.ROCKET_LAYER));
+        model = new RocketEntityModel(context.getPart(layer));
     }
 
     @Override
-    public Identifier getTexture(RocketEntity entity) {
+    public Identifier getTexture(AbstractRocketEntity entity) {
         return new Identifier("meteorcraft", "textures/entity/test.png");
     }
 
     @Override
-    public void render(RocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
+    public void render(AbstractRocketEntity entity, float yaw, float tickDelta, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light) {
         matrices.push();
 
         RocketEntityModel boatEntityModel = model;

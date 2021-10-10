@@ -1,5 +1,6 @@
-package com.github.meteorcraft.entity;
+package com.github.meteorcraft.entity.rocket;
 
+import com.github.meteorcraft.MeteorEntityTypes;
 import com.github.meteorcraft.screen.RocketScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -18,14 +19,18 @@ import net.minecraft.world.World;
 
 import java.util.ArrayList;
 
-public class RocketEntity extends LivingEntity {
-    public static final EntityModelLayer ROCKET_LAYER = new EntityModelLayer(new Identifier("meteorcraft", "rocket"), "main");
-    private boolean launched = false;
-    private boolean falling = false;
-    private int acceleration = 0;
+public abstract class AbstractRocketEntity extends LivingEntity {
+    protected int acceleration = 0;
 
-    public RocketEntity(EntityType<? extends LivingEntity> entityType, World world) {
+    public AbstractRocketEntity(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
+    }
+
+    public static EntityType<AbstractRocketEntity> getRocketEntityType(RocketTier tier) {
+        return switch (tier) {
+            case LANDER -> MeteorEntityTypes.LANDER_ENTITY;
+            case TIER1 -> MeteorEntityTypes.TIER_1_ROCKET_ENTITY;
+        };
     }
 
     @Override
@@ -57,39 +62,14 @@ public class RocketEntity extends LivingEntity {
         if (hasPassengers()) return ActionResult.PASS;
         else {
             player.startRiding(this);
-            launched = true;
+            ridingStart();
             return ActionResult.success(true);
         }
     }
 
-    @Override
-    public void tick() {
-        if (launched) {
-            acceleration++;
-            setVelocity(0, acceleration / 100D, 0);
-            if (getY() > 5000) {
-                launched = false;
-                acceleration = 0;
-                if (getPassengerList().contains(MinecraftClient.getInstance().player)) {
-                    MinecraftClient.getInstance().execute(() -> MinecraftClient.getInstance().setScreen(new RocketScreen()));
-                }
-                remove(RemovalReason.CHANGED_DIMENSION);
-            }
-        }
-        if (falling) {
-            acceleration++;
-            setVelocity(0, -acceleration / 100D, 0);
-            for (Entity entity : getPassengerList()) {
-                entity.fallDistance = 0;
-            }
-            if (isOnGround()) {
-                remove(RemovalReason.DISCARDED);
-            }
-        }
-        super.tick();
-    }
+    protected abstract void ridingStart();
 
-    public void falling() {
-        falling = true;
+    public enum RocketTier {
+        LANDER, TIER1
     }
 }

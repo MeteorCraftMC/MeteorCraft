@@ -1,6 +1,6 @@
-package com.github.meteorcraft.entity.model;
+package com.github.meteorcraft.entity.rocket.model;
 
-import com.github.meteorcraft.entity.RocketEntity;
+import com.github.meteorcraft.entity.rocket.AbstractRocketEntity;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import net.minecraft.client.model.ModelData;
@@ -11,11 +11,10 @@ import net.minecraft.client.model.ModelTransform;
 import net.minecraft.client.model.TexturedModelData;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.CompositeEntityModel;
-import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.util.math.MatrixStack;
 
-public class RocketEntityModel extends CompositeEntityModel<RocketEntity> {
+public class RocketEntityModel extends CompositeEntityModel<AbstractRocketEntity> {
     private final ModelPart base;
 
     public RocketEntityModel(ModelPart modelPart) {
@@ -30,7 +29,7 @@ public class RocketEntityModel extends CompositeEntityModel<RocketEntity> {
     }
 
     @Override
-    public void setAngles(RocketEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
+    public void setAngles(AbstractRocketEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
 
     }
 

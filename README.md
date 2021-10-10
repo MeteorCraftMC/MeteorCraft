@@ -37,8 +37,12 @@
 
 ### Entity
 
-- [ ] Rocket
-- [ ] Lander
+- [X] Rocket
+- [X] Lander
+
+### Rendering Item
+
+- [ ] Parachute
 
 ## Commit & Push Guide
 ## Commit Message

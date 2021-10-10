@@ -5,6 +5,7 @@
   "item.meteorcraft.raw_tin": "Raw Tin",
   "item.meteorcraft.tin_ingot": "Tin Ingot",
   "item.meteorcraft.oxygen_tank": "Oxygen Tank",
+  "item.meteorcraft.tier1_rocket": "Rocket - Tier 1",
   "gui.meteorcraft.launch": "Launch",
   "gui.meteorcraft.target": "Target: %s",
   "gui.meteorcraft.none": "NONE",
