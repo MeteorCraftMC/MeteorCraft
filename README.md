@@ -37,7 +37,7 @@
 
 ### Entity
 
-- [ ] Rocket
+- [X] Rocket
 - [ ] Lander
 
 ## Commit & Push Guide
