@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
 
-    private static HashMap<BlockPos, OxygenCollectorBlockEntity> entities = new HashMap();
+    private static HashMap<BlockPos, OxygenCollectorBlockEntity> entities = new HashMap<>();
 
     public OxygenCollectorBlock(Settings settings) {
         super(settings);
