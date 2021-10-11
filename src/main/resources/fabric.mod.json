@@ -21,7 +21,7 @@
   },
 
   "license": "CC0-1.0",
-  "icon": "assets/meteorcraft/icon.png",
+  "icon": "assets/meteorcraft/textures/item/meteorcraft.png",
 
   "environment": "*",
   "entrypoints": {

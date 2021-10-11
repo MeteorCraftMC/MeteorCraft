@@ -19,10 +19,12 @@ public class MeteorBlocks {
     public static final Block TIN_ORE = register(new Identifier(MOD_ID, "tin_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(4.0F)));
     public static final Block DEEPSLATE_TIN_ORE = register(new Identifier(MOD_ID, "deepslate_tin_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(5.5F)));
     public static final Block OXYGEN_COLLECTOR = register(new Identifier(MOD_ID, "oxygen_collector"), new OxygenCollectorBlock(FabricBlockSettings.of(Material.METAL).breakByTool(FabricToolTags.PICKAXES, 2).strength(6.0F)));
+    public static final Block ALUMINUM_ORE = register(new Identifier(MOD_ID, "aluminum_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(4.0F)));
+    public static final Block DEEPSLATE_ALUMINUM_ORE = register(new Identifier(MOD_ID, "deepslate_aluminum_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(5.5F)));
 
     private static Block register(Identifier identifier, Block block) {
         Registry.register(Registry.BLOCK, identifier, block);
-        Registry.register(Registry.ITEM, identifier, new BlockItem(block, new FabricItemSettings().group(ItemGroup.BUILDING_BLOCKS)));
+        Registry.register(Registry.ITEM, identifier, new BlockItem(block, new FabricItemSettings().group(MeteorItems.GROUP)));
         return block;
     }
 

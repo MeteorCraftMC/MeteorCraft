@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "meteorcraft:compressed_steel"
+    },
+    {
+      "item": "meteorcraft:compressed_steel"
+    },
+    {
+      "item": "meteorcraft:compressed_steel"
+    },
+    {
+      "item": "meteorcraft:compressed_steel"
+    },
+    {
+      "item": "meteorcraft:compressed_steel"
+    },
+    {
+      "item": "meteorcraft:compressed_iron"
+    },
+    {
+      "item": "meteorcraft:compressed_iron"
+    },
+    {
+      "item": "meteorcraft:aluminum_ingot"
+    },
+    {
+      "item": "meteorcraft:aluminum_ingot"
+    }
+  ],
+  "result": {
+    "item": "meteorcraft:rocket_plate",
+    "count": 1
+  }
+}

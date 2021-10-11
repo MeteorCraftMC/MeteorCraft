@@ -1,0 +1,9 @@
+{
+    "type": "minecraft:smelting",
+    "ingredient": {
+        "item": "meteorcraft:raw_aluminum"
+    },
+    "result": "meteorcraft:aluminum_ingot",
+    "experience": 0.7,
+    "cookingtime": 200
+}

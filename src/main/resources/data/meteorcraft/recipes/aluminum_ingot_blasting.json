@@ -1,9 +1,9 @@
 {
     "type": "minecraft:blasting",
     "ingredient": {
-        "item": "meteorcraft:deepslate_tin_ore"
+        "item": "meteorcraft:raw_aluminum"
     },
-    "result": "meteorcraft:tin_ingot",
+    "result": "meteorcraft:aluminum_ingot",
     "experience": 0.7,
     "cookingtime": 100
 }
