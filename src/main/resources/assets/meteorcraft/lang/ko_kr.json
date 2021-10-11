@@ -11,5 +11,8 @@
   "gui.meteorcraft.none": "없음",
   "gui.meteorcraft.sun": "태양",
   "gui.meteorcraft.earth": "지구",
-  "gui.meteorcraft.moon": "달"
+  "gui.meteorcraft.moon": "달",
+  "gui.meteorcraft.press_space": "스페이스키를 눌러 발사하세요!",
+  "gui.meteorcraft.hold_space": "스페이스키에서 손을 때지 마세요!",
+  "gui.meteorcraft.launched": "발사!"
 }

@@ -141,6 +141,7 @@ public class RocketScreen extends Screen {
             player.teleport(world, 0, 5000, 0, 0, 0);
             LanderEntity lander = (LanderEntity) MeteorEntityTypes.LANDER_ENTITY.create(world);
             assert lander != null;
+            lander.setTier(tier);
             world.spawnEntity(lander);
             lander.teleport(0, 5000, 0);
             player.startRiding(lander);

@@ -15,8 +15,10 @@ import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.OreFeatureConfig;
 import net.minecraft.world.gen.heightprovider.UniformHeightProvider;
 
+import static com.github.meteorcraft.MeteorCraft.MOD_ID;
+
 public class MeteorOres {
-    private static final ConfiguredFeature<?, ?> TIN_ORE = register("tin_ore", Feature.ORE
+    private static final ConfiguredFeature<?, ?> TIN_ORE = register(new Identifier(MOD_ID, "tin_ore"), Feature.ORE
             .configure(new OreFeatureConfig(
                     OreFeatureConfig.Rules.BASE_STONE_OVERWORLD,
                     MeteorBlocks.TIN_ORE.getDefaultState(),
@@ -26,7 +28,7 @@ public class MeteorOres {
                     UniformHeightProvider.create(YOffset.aboveBottom(0), YOffset.fixed(64)))) // Inclusive min and max height
             .spreadHorizontally()
             .repeat(6));
-    private static final ConfiguredFeature<?, ?> DEEPSLATE_TIN_ORE = register("deepslate_tin_ore", Feature.ORE
+    private static final ConfiguredFeature<?, ?> DEEPSLATE_TIN_ORE = register(new Identifier(MOD_ID, "deepslate_tin_ore"), Feature.ORE
             .configure(new OreFeatureConfig(
                     OreFeatureConfig.Rules.DEEPSLATE_ORE_REPLACEABLES,
                     MeteorBlocks.DEEPSLATE_TIN_ORE.getDefaultState(),
@@ -37,9 +39,8 @@ public class MeteorOres {
             .spreadHorizontally()
             .repeat(6));
 
-    public static ConfiguredFeature<?, ?> register(String id, ConfiguredFeature<?, ?> repeat) {
-        RegistryKey<ConfiguredFeature<?, ?>> configuredFeatureRegistryKey = RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY,
-                new Identifier("meteorcraft", id));
+    public static ConfiguredFeature<?, ?> register(Identifier identifier, ConfiguredFeature<?, ?> repeat) {
+        RegistryKey<ConfiguredFeature<?, ?>> configuredFeatureRegistryKey = RegistryKey.of(Registry.CONFIGURED_FEATURE_KEY, identifier);
         Registry.register(BuiltinRegistries.CONFIGURED_FEATURE, configuredFeatureRegistryKey.getValue(), repeat);
         //noinspection deprecation
         BiomeModifications.addFeature(BiomeSelectors.foundInOverworld(), GenerationStep.Feature.UNDERGROUND_ORES, configuredFeatureRegistryKey);

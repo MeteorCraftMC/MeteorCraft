@@ -6,19 +6,19 @@ import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import static com.github.meteorcraft.MeteorCraft.MOD_ID;
+
 @SuppressWarnings("unchecked")
 public class MeteorBlockEntityTypes {
-    private static final String MOD_ID = "meteorcraft";
-
-    private static BlockEntityType<?> register(Identifier identifier, BlockEntityType<?> entry) {
-        return Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier, entry);
-    }    public static final BlockEntityType<OxygenCollectorBlockEntity> OXYGEN_COLLECTOR =
+    public static final BlockEntityType<OxygenCollectorBlockEntity> OXYGEN_COLLECTOR =
             (BlockEntityType<OxygenCollectorBlockEntity>) register(
                     new Identifier(MOD_ID, "oxygen_collector"),
                     FabricBlockEntityTypeBuilder.create(OxygenCollectorBlockEntity::new, MeteorBlocks.OXYGEN_COLLECTOR).build(null));
 
-    public static void call() {
+    private static BlockEntityType<?> register(Identifier identifier, BlockEntityType<?> entry) {
+        return Registry.register(Registry.BLOCK_ENTITY_TYPE, identifier, entry);
     }
 
-
+    public static void call() {
+    }
 }

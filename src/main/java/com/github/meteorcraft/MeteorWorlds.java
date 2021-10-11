@@ -7,4 +7,8 @@ public class MeteorWorlds {
     public static boolean isMoon(World world) {
         return world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"));
     }
+
+    public static boolean isOverworld(World world) {
+        return world.getRegistryKey().getValue().equals(new Identifier("minecraft:overworld"));
+    }
 }

@@ -11,5 +11,8 @@
   "gui.meteorcraft.none": "NONE",
   "gui.meteorcraft.sun": "Sun",
   "gui.meteorcraft.earth": "Earth",
-  "gui.meteorcraft.moon": "Moon"
+  "gui.meteorcraft.moon": "Moon",
+  "gui.meteorcraft.press_space": "Press the space key!",
+  "gui.meteorcraft.hold_space": "Hold the space key!",
+  "gui.meteorcraft.launched": "Launched!"
 }

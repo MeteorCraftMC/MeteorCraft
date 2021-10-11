@@ -1,20 +1,15 @@
 package com.github.meteorcraft.entity.rocket;
 
 import com.github.meteorcraft.MeteorEntityTypes;
-import com.github.meteorcraft.screen.RocketScreen;
-import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.client.render.entity.model.EntityModelLayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
-import net.minecraft.util.Identifier;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
@@ -48,11 +43,6 @@ public abstract class AbstractRocketEntity extends LivingEntity {
     }
 
     @Override
-    public boolean isPushable() {
-        return true;
-    }
-
-    @Override
     public Arm getMainArm() {
         return Arm.RIGHT;
     }
@@ -71,5 +61,11 @@ public abstract class AbstractRocketEntity extends LivingEntity {
 
     public enum RocketTier {
         LANDER, TIER1
+    }
+
+    @Override
+    public void tick() {
+        setInvulnerable(true);
+        super.tick();
     }
 }

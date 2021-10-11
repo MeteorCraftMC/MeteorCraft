@@ -9,9 +9,10 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import static com.github.meteorcraft.MeteorCraft.MOD_ID;
+
 @SuppressWarnings("unchecked")
 public class MeteorEntityTypes {
-    private static final String MOD_ID = "meteorcraft";
     public static final EntityType<AbstractRocketEntity> TIER_1_ROCKET_ENTITY = (EntityType<AbstractRocketEntity>) register(
             new Identifier(MOD_ID, "tier1_rocket"),
             FabricEntityTypeBuilder.create(SpawnGroup.MISC, Tier1RocketEntity::new).build()

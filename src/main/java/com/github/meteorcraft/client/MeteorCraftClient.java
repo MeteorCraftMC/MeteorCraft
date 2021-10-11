@@ -1,6 +1,7 @@
 package com.github.meteorcraft.client;
 
 import com.github.meteorcraft.MeteorEntityTypes;
+import com.github.meteorcraft.entity.rocket.AbstractTierRocketEntity;
 import com.github.meteorcraft.entity.rocket.LanderEntity;
 import com.github.meteorcraft.entity.rocket.Tier1RocketEntity;
 import com.github.meteorcraft.entity.rocket.model.RocketEntityModel;
@@ -15,10 +16,29 @@ import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.glfw.GLFW;
 
 public class MeteorCraftClient implements ClientModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger("Meteor Craft");
+	private static AbstractTierRocketEntity ridingRocket = null;
+
+    public static void rocketRidingStart(AbstractTierRocketEntity entity) {
+		ridingRocket = entity;
+    }
+
+	public static void rocketRidingEnd() {
+		ridingRocket = null;
+	}
+
+	public static boolean isRidingRocket() {
+		return ridingRocket != null;
+	}
+
+	@Nullable
+	public static AbstractTierRocketEntity getRidingRocket() {
+		return ridingRocket;
+	}
 
 	@Override
 	public void onInitializeClient() {
