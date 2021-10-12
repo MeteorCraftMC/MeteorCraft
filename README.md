@@ -34,6 +34,10 @@
 ### Item
 
 - [ ] Rubber
+- [X] Steel Ingot
+- [X] Rocket Plate
+- [X] Compressed Iron
+- [X] Compressed Steel
 
 ### Entity
 
