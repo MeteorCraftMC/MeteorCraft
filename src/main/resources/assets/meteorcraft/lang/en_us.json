@@ -2,10 +2,19 @@
   "block.meteorcraft.moonstone": "Moon Stone",
   "block.meteorcraft.tin_ore": "Tin Ore",
   "block.meteorcraft.deepslate_tin_ore": "Deepslate Tin Ore",
+  "block.meteorcraft.oxygen_collector": "Oxygen Collector",
+  "block.meteorcraft.aluminum_ore": "Aluminum Ore",
+  "block.meteorcraft.deepslate_aluminum_ore": "Deepslate Aluminum Ore",
   "item.meteorcraft.raw_tin": "Raw Tin",
   "item.meteorcraft.tin_ingot": "Tin Ingot",
   "item.meteorcraft.oxygen_tank": "Oxygen Tank",
   "item.meteorcraft.tier1_rocket": "Rocket - Tier 1",
+  "item.meteorcraft.steel_ingot": "Steel Ingot",
+  "item.meteorcraft.rocket_plate": "Rocket Plate",
+  "item.meteorcraft.raw_aluminum": "Raw Aluminum",
+  "item.meteorcraft.aluminum_ingot": "Aluminum Ingot",
+  "item.meteorcraft.compressed_iron": "Compressed Iron",
+  "item.meteorcraft.compressed_steel": "Compressed Steel",
   "gui.meteorcraft.launch": "Launch",
   "gui.meteorcraft.target": "Target: %s",
   "gui.meteorcraft.none": "NONE",
@@ -14,5 +23,6 @@
   "gui.meteorcraft.moon": "Moon",
   "gui.meteorcraft.press_space": "Press the space key!",
   "gui.meteorcraft.hold_space": "Hold the space key!",
-  "gui.meteorcraft.launched": "Launched!"
+  "gui.meteorcraft.launched": "Launched!",
+  "itemGroup.meteorcraft.group": "Meteor Craft"
 }
