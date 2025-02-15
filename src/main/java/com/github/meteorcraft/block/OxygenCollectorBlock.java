@@ -6,7 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.text.LiteralText;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Pair;
@@ -51,9 +51,9 @@ public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
-        super.onBreak(world, pos, state, player);
+    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         removeBlockEntity(pos, state);
+        return super.onBreak(world, pos, state, player);
     }
 
     @Override
@@ -63,9 +63,9 @@ public class OxygenCollectorBlock extends Block implements BlockEntityProvider {
     }
 
     @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, Hand hand, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         EnergyStorage storage = EnergyStorage.SIDED.find(world, pos, player.getMovementDirection());
-        player.sendMessage(new LiteralText(String.valueOf(storage.getAmount())), false);
+        player.sendMessage(Text.of(String.valueOf(storage.getAmount())), false);
         return ActionResult.PASS;
     }
 }

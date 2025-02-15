@@ -5,10 +5,10 @@ import net.minecraft.world.World;
 
 public class MeteorWorlds {
     public static boolean isMoon(World world) {
-        return world.getRegistryKey().getValue().equals(new Identifier("meteorcraft:moon"));
+        return world.getRegistryKey().getValue().equals(Identifier.of("meteorcraft:moon"));
     }
 
     public static boolean isOverworld(World world) {
-        return world.getRegistryKey().getValue().equals(new Identifier("minecraft:overworld"));
+        return world.getRegistryKey().getValue().equals(Identifier.of("minecraft:overworld"));
     }
 }

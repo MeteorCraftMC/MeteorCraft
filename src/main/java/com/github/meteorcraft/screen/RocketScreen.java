@@ -7,22 +7,25 @@ import com.github.meteorcraft.entity.rocket.AbstractRocketEntity;
 import com.github.meteorcraft.entity.rocket.LanderEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ConfirmChatLinkScreen;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
 import net.minecraft.client.render.GameRenderer;
+import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.SpawnReason;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
-import net.minecraft.text.LiteralText;
-import net.minecraft.text.TranslatableText;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Util;
-import net.minecraft.util.registry.RegistryKey;
 import net.minecraft.world.World;
 import org.lwjgl.system.CallbackI;
+
+import java.util.Set;
 
 public class RocketScreen extends Screen {
     private ButtonWidget launchButton;
@@ -31,59 +34,58 @@ public class RocketScreen extends Screen {
     private int key = 0;
 
     public RocketScreen(AbstractRocketEntity.RocketTier tier) {
-        super(new LiteralText("Instrument Panel"));
+        super(Text.of("Instrument Panel"));
         this.tier = tier;
     }
 
-    @SuppressWarnings("RedundantLabeledSwitchRuleCodeBlock")
     @Override
     protected void init() {
-        assert client != null;
-        assert client.player != null;
-        
-        addDrawableChild(new TexturedButtonWidget(width / 2 - 12, height / 2 - 12, 25, 25, 0, 0, 25, new Identifier("meteorcraft", "textures/environment/sun.png"), 25, 50, buttonWidget -> {
-            launchButton.active = true;
-            type = PlanetType.SUN;
-        }));
-        addDrawableChild(new TexturedButtonWidget(width / 2 + 30, height / 2 + 30, 20, 20, 0, 0, 20, new Identifier("meteorcraft", "textures/environment/earth.png"), 20, 40, buttonWidget -> {
-            launchButton.active = true;
-            System.out.println("earth");
-            type = PlanetType.EARTH;
-        }));
-        addDrawableChild(new TexturedButtonWidget(width / 2 + 55, height / 2 + 45, 15, 15, 0, 0, 15, new Identifier("meteorcraft", "textures/environment/moon.png"), 15, 30, buttonWidget -> {
-            launchButton.active = true;
-            type = PlanetType.MOON;
-        }));
-
-        launchButton = addDrawableChild(new ButtonWidget(width - 105, height - 25, 100, 20, new TranslatableText("gui.meteorcraft.launch"), buttonWidget -> {
-            switch (type) {
-                case NONE -> {
-                }
-                case LEAF -> {
-                    client.setScreen(new ConfirmChatLinkScreen((confirmed) -> {
-                        if (confirmed) {
-                            Util.getOperatingSystem().open("https://github.com/WintChoco/leaf-mirror/");
-                        }
-
-                        this.client.setScreen(this);
-                    }, "https://github.com/WintChoco/leaf-mirror/", true));
-                }
-                case SUN -> {
-                    if (MeteorWorlds.isMoon(client.player.getEntityWorld())) {
-                        if (key == 4) {
-                            type = PlanetType.LEAF;
-                        }
-                    }
-                }
-                case EARTH -> {
-                    move("minecraft:overworld");
-                }
-                case MOON -> {
-                    move("meteorcraft:moon");
-                }
-            }
-        }));
-        launchButton.active = false;
+//        assert client != null;
+//        assert client.player != null;
+//
+//        addDrawableChild(new TexturedButtonWidget(width / 2 - 12, height / 2 - 12, 25, 25, 0, 0, 25, Identifier.of("meteorcraft", "textures/environment/sun.png"), 25, 50, buttonWidget -> {
+//            launchButton.active = true;
+//            type = PlanetType.SUN;
+//        }));
+//        addDrawableChild(new TexturedButtonWidget(width / 2 + 30, height / 2 + 30, 20, 20, 0, 0, 20, Identifier.of("meteorcraft", "textures/environment/earth.png"), 20, 40, buttonWidget -> {
+//            launchButton.active = true;
+//            System.out.println("earth");
+//            type = PlanetType.EARTH;
+//        }));
+//        addDrawableChild(new TexturedButtonWidget(width / 2 + 55, height / 2 + 45, 15, 15, 0, 0, 15, Identifier.of("meteorcraft", "textures/environment/moon.png"), 15, 30, buttonWidget -> {
+//            launchButton.active = true;
+//            type = PlanetType.MOON;
+//        }));
+//
+//        launchButton = addDrawableChild(new ButtonWidget(width - 105, height - 25, 100, 20, new TranslatableText("gui.meteorcraft.launch"), buttonWidget -> {
+//            switch (type) {
+//                case NONE -> {
+//                }
+//                case LEAF -> {
+//                    client.setScreen(new ConfirmChatLinkScreen((confirmed) -> {
+//                        if (confirmed) {
+//                            Util.getOperatingSystem().open("https://github.com/WintChoco/leaf-mirror/");
+//                        }
+//
+//                        this.client.setScreen(this);
+//                    }, "https://github.com/WintChoco/leaf-mirror/", true));
+//                }
+//                case SUN -> {
+//                    if (MeteorWorlds.isMoon(client.player.getEntityWorld())) {
+//                        if (key == 4) {
+//                            type = PlanetType.LEAF;
+//                        }
+//                    }
+//                }
+//                case EARTH -> {
+//                    move("minecraft:overworld");
+//                }
+//                case MOON -> {
+//                    move("meteorcraft:moon");
+//                }
+//            }
+//        }));
+//        launchButton.active = false;
     }
 
     @Override
@@ -129,7 +131,7 @@ public class RocketScreen extends Screen {
             assert server != null;
             RegistryKey<World> key = null;
             for (RegistryKey<World> worldRegistryKey : server.getWorldRegistryKeys()) {
-                if (worldRegistryKey.getValue().equals(new Identifier(s))) {
+                if (worldRegistryKey.getValue().equals(Identifier.of(s))) {
                     key = worldRegistryKey;
                 }
             }
@@ -138,35 +140,31 @@ public class RocketScreen extends Screen {
             assert world != null;
             assert player != null;
 
-            player.teleport(world, 0, 5000, 0, 0, 0);
-            LanderEntity lander = (LanderEntity) MeteorEntityTypes.LANDER_ENTITY.create(world);
+            player.teleport(world, player.getX(), 5000, player.getZ(), Set.of(), 0, 0, true);
+            LanderEntity lander = (LanderEntity) MeteorEntityTypes.LANDER_ENTITY.create(world, SpawnReason.TRIGGERED);
+
             assert lander != null;
             lander.setTier(tier);
             world.spawnEntity(lander);
-            lander.teleport(0, 5000, 0);
+            lander.teleport(0, 5000, 0, false);
             player.startRiding(lander);
         }
     }
 
     @Override
-    public void renderBackground(MatrixStack matrices) {
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, new Identifier("meteorcraft", "textures/environment/stars.png"));
-
-        this.drawTexture(matrices, 0, 0, 0, 0, width, height);
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        context.drawTexture(RenderLayer::getGuiTextured, Identifier.of("meteorcraft", "textures/environment/stars.png"), 0, 0, 0, 0, width, height, width, height);
     }
 
     @Override
-    public void render(MatrixStack matrices, int mouseX, int mouseY, float delta) {
-        renderBackground(matrices);
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        super.render(context, mouseX, mouseY, delta);
 
-        drawCenteredText(matrices, textRenderer, new TranslatableText("gui.meteorcraft.target", type.getName()), width / 2, height - 60, 0xFFFFFF);
-        super.render(matrices, mouseX, mouseY, delta);
+        context.drawCenteredTextWithShadow(textRenderer, Text.translatable("gui.meteorcraft.target", type.getName()), width / 2, height - 60, 0xFFFFFF);
     }
 
     @Override
-    public boolean isPauseScreen() {
+    public boolean shouldPause() {
         return false;
     }
 
@@ -178,13 +176,13 @@ public class RocketScreen extends Screen {
     public enum PlanetType {
         NONE("gui.meteorcraft.none"), SUN("gui.meteorcraft.sun"), EARTH("gui.meteorcraft.earth"), MOON("gui.meteorcraft.moon"), LEAF("gui.leaf.name");
 
-        private final TranslatableText name;
+        private final Text name;
 
         PlanetType(String name) {
-            this.name = new TranslatableText(name);
+            this.name = Text.of(name);
         }
 
-        public TranslatableText getName() {
+        public Text getName() {
             return name;
         }
     }

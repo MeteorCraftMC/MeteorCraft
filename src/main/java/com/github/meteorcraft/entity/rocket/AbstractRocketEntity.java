@@ -4,7 +4,6 @@ import com.github.meteorcraft.MeteorEntityTypes;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -53,7 +52,7 @@ public abstract class AbstractRocketEntity extends LivingEntity {
         else {
             player.startRiding(this);
             ridingStart();
-            return ActionResult.success(true);
+            return ActionResult.SUCCESS;
         }
     }
 

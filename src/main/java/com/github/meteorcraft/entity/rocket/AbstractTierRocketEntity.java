@@ -50,13 +50,13 @@ public abstract class AbstractTierRocketEntity extends AbstractRocketEntity {
                     launching = true;
                     if (launching) {
                         if (MinecraftClient.getInstance().getServer() != null)
-                            MinecraftClient.getInstance().getServer().getWorld(world.getRegistryKey()).spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE.getType(), getX(), getY() - 1, getZ(), 10, 0, 0, 0, 0.05);
+                            MinecraftClient.getInstance().getServer().getWorld(getWorld().getRegistryKey()).spawnParticles(ParticleTypes.CAMPFIRE_COSY_SMOKE.getType(), getX(), getY() - 1, getZ(), 10, 0, 0, 0, 0.05);
                         launchProgress++;
                         if (launchProgress == 100) {
                             launching = false;
                             launched = true;
                             if (MinecraftClient.getInstance().getServer() != null)
-                                MinecraftClient.getInstance().getServer().getWorld(world.getRegistryKey()).spawnParticles(ParticleTypes.EXPLOSION_EMITTER.getType(), getX(), getY() - 2, getZ(), 1, 0, 0, 0, 0);
+                                MinecraftClient.getInstance().getServer().getWorld(getWorld().getRegistryKey()).spawnParticles(ParticleTypes.EXPLOSION_EMITTER.getType(), getX(), getY() - 2, getZ(), 1, 0, 0, 0, 0);
                         }
                     }
                 }

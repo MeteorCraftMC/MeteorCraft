@@ -13,9 +13,9 @@ public class MeteorCraft implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        MeteorItems.call();
         MeteorBlocks.call();
         MeteorOres.call();
-        MeteorItems.call();
         MeteorBlockEntityTypes.call();
         MeteorEntityTypes.call();
         //noinspection ConstantConditions

@@ -1,33 +1,55 @@
 package com.github.meteorcraft;
 
 import com.github.meteorcraft.block.OxygenCollectorBlock;
-import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
-import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
-import net.minecraft.block.Material;
-import net.minecraft.block.OreBlock;
 import net.minecraft.item.BlockItem;
-import net.minecraft.item.ItemGroup;
+import net.minecraft.item.Item;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.registry.Registry;
 
 import static com.github.meteorcraft.MeteorCraft.MOD_ID;
 
 public class MeteorBlocks {
-    public static final Block MOON_STONE = register(new Identifier(MOD_ID, "moonstone"), new Block(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(3.0F)));
-    public static final Block TIN_ORE = register(new Identifier(MOD_ID, "tin_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(4.0F)));
-    public static final Block DEEPSLATE_TIN_ORE = register(new Identifier(MOD_ID, "deepslate_tin_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(5.5F)));
-    public static final Block OXYGEN_COLLECTOR = register(new Identifier(MOD_ID, "oxygen_collector"), new OxygenCollectorBlock(FabricBlockSettings.of(Material.METAL).breakByTool(FabricToolTags.PICKAXES, 2).strength(6.0F)));
-    public static final Block ALUMINUM_ORE = register(new Identifier(MOD_ID, "aluminum_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(4.0F)));
-    public static final Block DEEPSLATE_ALUMINUM_ORE = register(new Identifier(MOD_ID, "deepslate_aluminum_ore"), new OreBlock(FabricBlockSettings.of(Material.STONE).breakByTool(FabricToolTags.PICKAXES, 2).strength(5.5F)));
+    public static final RegistryKey<Block> MOON_STONE_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "moonstone"));
+    public static final Block MOON_STONE = register(new Block(AbstractBlock.Settings.create().strength(3.0F).registryKey(MOON_STONE_KEY)), MOON_STONE_KEY);
 
-    private static Block register(Identifier identifier, Block block) {
-        Registry.register(Registry.BLOCK, identifier, block);
-        Registry.register(Registry.ITEM, identifier, new BlockItem(block, new FabricItemSettings().group(MeteorItems.GROUP)));
-        return block;
+    public static final RegistryKey<Block> TIN_ORE_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "tin_ore"));
+    public static final Block TIN_ORE = register(new Block(AbstractBlock.Settings.create().strength(4.0F).registryKey(TIN_ORE_KEY)), TIN_ORE_KEY);
+
+    public static final RegistryKey<Block> DEEPSLATE_TIN_ORE_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "deepslate_tin_ore"));
+    public static final Block DEEPSLATE_TIN_ORE = register(new Block(AbstractBlock.Settings.create().strength(5.5F).registryKey(DEEPSLATE_TIN_ORE_KEY)), DEEPSLATE_TIN_ORE_KEY);
+
+    public static final RegistryKey<Block> OXYGEN_COLLECTOR_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "oxygen_collector"));
+    public static final Block OXYGEN_COLLECTOR = register(new OxygenCollectorBlock(AbstractBlock.Settings.create().strength(6.0F).registryKey(OXYGEN_COLLECTOR_KEY)), OXYGEN_COLLECTOR_KEY);
+
+    public static final RegistryKey<Block> ALUMINUM_ORE_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "aluminum_ore"));
+    public static final Block ALUMINUM_ORE = register(new Block(AbstractBlock.Settings.create().strength(4.0F).registryKey(ALUMINUM_ORE_KEY)), ALUMINUM_ORE_KEY);
+
+    public static final RegistryKey<Block> DEEPSLATE_ALUMINUM_ORE_KEY = RegistryKey.of(RegistryKeys.BLOCK, Identifier.of(MOD_ID, "deepslate_aluminum_ore"));
+    public static final Block DEEPSLATE_ALUMINUM_ORE = register(new Block(AbstractBlock.Settings.create().strength(5.5F).registryKey(DEEPSLATE_ALUMINUM_ORE_KEY)), DEEPSLATE_ALUMINUM_ORE_KEY);
+
+    public static Block register(Block block, RegistryKey<Block> blockKey) {
+        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, blockKey.getValue());
+
+        BlockItem blockItem = new BlockItem(block, new Item.Settings().registryKey(itemKey));
+        Registry.register(Registries.ITEM, itemKey, blockItem);
+
+        return Registry.register(Registries.BLOCK, blockKey, block);
     }
 
     public static void call() {
+        ItemGroupEvents.modifyEntriesEvent(MeteorItems.GROUP_KEY).register(group -> {
+            group.add(MOON_STONE.asItem());
+            group.add(TIN_ORE.asItem());
+            group.add(DEEPSLATE_TIN_ORE.asItem());
+            group.add(OXYGEN_COLLECTOR.asItem());
+            group.add(ALUMINUM_ORE.asItem());
+            group.add(DEEPSLATE_ALUMINUM_ORE.asItem());
+        });
     }
 }
