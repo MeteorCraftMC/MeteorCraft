@@ -9,6 +9,9 @@ import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
@@ -21,7 +24,7 @@ public class LanderEntity extends AbstractRocketEntity {
 
     protected boolean launched = false;
 
-    public LanderEntity(EntityType<? extends LivingEntity> entityType, World world) {
+    public LanderEntity(EntityType<? extends VehicleEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -62,5 +65,10 @@ public class LanderEntity extends AbstractRocketEntity {
     @Override
     protected void ridingStart() {
         launched = true;
+    }
+
+    @Override
+    protected Item asItem() {
+        return Items.AIR;
     }
 }

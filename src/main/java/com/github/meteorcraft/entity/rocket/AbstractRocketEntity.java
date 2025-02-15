@@ -1,22 +1,30 @@
 package com.github.meteorcraft.entity.rocket;
 
 import com.github.meteorcraft.MeteorEntityTypes;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 
 import java.util.ArrayList;
 
-public abstract class AbstractRocketEntity extends LivingEntity {
+public abstract class AbstractRocketEntity extends VehicleEntity {
     protected int acceleration = 0;
 
-    public AbstractRocketEntity(EntityType<? extends LivingEntity> entityType, World world) {
+    public AbstractRocketEntity(EntityType<? extends VehicleEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -25,25 +33,6 @@ public abstract class AbstractRocketEntity extends LivingEntity {
             case LANDER -> MeteorEntityTypes.LANDER_ENTITY;
             case TIER1 -> MeteorEntityTypes.TIER_1_ROCKET_ENTITY;
         };
-    }
-
-    @Override
-    public Iterable<ItemStack> getArmorItems() {
-        return new ArrayList<>();
-    }
-
-    @Override
-    public ItemStack getEquippedStack(EquipmentSlot slot) {
-        return ItemStack.EMPTY;
-    }
-
-    @Override
-    public void equipStack(EquipmentSlot slot, ItemStack stack) {
-    }
-
-    @Override
-    public Arm getMainArm() {
-        return Arm.RIGHT;
     }
 
     @Override
@@ -64,7 +53,14 @@ public abstract class AbstractRocketEntity extends LivingEntity {
 
     @Override
     public void tick() {
-        setInvulnerable(true);
         super.tick();
+    }
+
+    @Override
+    protected void readCustomDataFromNbt(NbtCompound nbt) {
+    }
+
+    @Override
+    protected void writeCustomDataToNbt(NbtCompound nbt) {
     }
 }

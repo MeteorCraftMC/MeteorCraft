@@ -1,12 +1,17 @@
 package com.github.meteorcraft.entity.rocket;
 
+import com.github.meteorcraft.MeteorItems;
 import com.github.meteorcraft.client.MeteorCraftClient;
 import com.github.meteorcraft.mixin.KeyBindingAccessor;
 import com.github.meteorcraft.screen.RocketScreen;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.util.InputUtil;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.vehicle.VehicleEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.Items;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.world.World;
 
@@ -16,7 +21,7 @@ public abstract class AbstractTierRocketEntity extends AbstractRocketEntity {
     protected boolean launched = false;
     private int launchProgress = 0;
 
-    public AbstractTierRocketEntity(EntityType<? extends LivingEntity> entityType, World world, RocketTier tier) {
+    public AbstractTierRocketEntity(EntityType<? extends VehicleEntity> entityType, World world, RocketTier tier) {
         super(entityType, world);
         this.tier = tier;
     }
@@ -34,7 +39,7 @@ public abstract class AbstractTierRocketEntity extends AbstractRocketEntity {
         if (launched) {
             acceleration++;
             setVelocity(0, acceleration / 100D, 0);
-            if (getY() > 5000) {
+            if (getY() > 500) {
                 launched = false;
                 acceleration = 0;
                 if (getPassengerList().contains(MinecraftClient.getInstance().player)) {
@@ -70,5 +75,10 @@ public abstract class AbstractTierRocketEntity extends AbstractRocketEntity {
     @Override
     protected void ridingStart() {
         MeteorCraftClient.rocketRidingStart(this);
+    }
+
+    @Override
+    protected Item asItem() {
+        return MeteorItems.TIER1_ROCKET;
     }
 }

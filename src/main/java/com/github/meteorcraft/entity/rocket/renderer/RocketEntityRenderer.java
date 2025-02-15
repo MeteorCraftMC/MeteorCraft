@@ -27,7 +27,6 @@ public class RocketEntityRenderer extends EntityRenderer<AbstractRocketEntity, E
         matrixStack.push();
 
         RocketEntityModel rocketEntityModel = model;
-        matrixStack.translate(0, -1, 0);
         matrixStack.multiply(RotationAxis.POSITIVE_Y.rotationDegrees(90.0F));
         rocketEntityModel.setAngles(entityRenderState);
         VertexConsumer vertexConsumer = vertexConsumerProvider.getBuffer(rocketEntityModel.getLayer(Identifier.of("meteorcraft", "textures/entity/test.png")));

@@ -6,9 +6,9 @@
     "water_color": 8541136,
     "water_fog_color": 657242
   },
-  "surface_builder": "meteorcraft:moon",
-  "carvers": {
-  },
+  "carvers": [
+    "minecraft:canyon"
+  ],
   "features": [
     [],
     [],
@@ -33,7 +33,7 @@
   },
   "spawn_costs": {},
   "player_spawn_friendly": false,
-  "precipitation": "none",
+  "has_precipitation": false,
   "temperature": 0.8,
   "downfall": 0.4,
   "category": "none",

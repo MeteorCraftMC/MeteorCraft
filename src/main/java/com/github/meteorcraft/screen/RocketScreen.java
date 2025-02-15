@@ -1,5 +1,6 @@
 package com.github.meteorcraft.screen;
 
+import com.github.meteorcraft.MeteorCraft;
 import com.github.meteorcraft.MeteorEntityTypes;
 import com.github.meteorcraft.MeteorWorlds;
 import com.github.meteorcraft.client.MeteorCraftClient;
@@ -8,6 +9,8 @@ import com.github.meteorcraft.entity.rocket.LanderEntity;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ButtonTextures;
+import net.minecraft.client.gui.screen.ConfirmLinkScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.gui.widget.TexturedButtonWidget;
@@ -40,52 +43,56 @@ public class RocketScreen extends Screen {
 
     @Override
     protected void init() {
-//        assert client != null;
-//        assert client.player != null;
-//
-//        addDrawableChild(new TexturedButtonWidget(width / 2 - 12, height / 2 - 12, 25, 25, 0, 0, 25, Identifier.of("meteorcraft", "textures/environment/sun.png"), 25, 50, buttonWidget -> {
-//            launchButton.active = true;
-//            type = PlanetType.SUN;
-//        }));
-//        addDrawableChild(new TexturedButtonWidget(width / 2 + 30, height / 2 + 30, 20, 20, 0, 0, 20, Identifier.of("meteorcraft", "textures/environment/earth.png"), 20, 40, buttonWidget -> {
-//            launchButton.active = true;
-//            System.out.println("earth");
-//            type = PlanetType.EARTH;
-//        }));
-//        addDrawableChild(new TexturedButtonWidget(width / 2 + 55, height / 2 + 45, 15, 15, 0, 0, 15, Identifier.of("meteorcraft", "textures/environment/moon.png"), 15, 30, buttonWidget -> {
-//            launchButton.active = true;
-//            type = PlanetType.MOON;
-//        }));
-//
-//        launchButton = addDrawableChild(new ButtonWidget(width - 105, height - 25, 100, 20, new TranslatableText("gui.meteorcraft.launch"), buttonWidget -> {
-//            switch (type) {
-//                case NONE -> {
-//                }
-//                case LEAF -> {
-//                    client.setScreen(new ConfirmChatLinkScreen((confirmed) -> {
-//                        if (confirmed) {
-//                            Util.getOperatingSystem().open("https://github.com/WintChoco/leaf-mirror/");
-//                        }
-//
-//                        this.client.setScreen(this);
-//                    }, "https://github.com/WintChoco/leaf-mirror/", true));
-//                }
-//                case SUN -> {
-//                    if (MeteorWorlds.isMoon(client.player.getEntityWorld())) {
-//                        if (key == 4) {
-//                            type = PlanetType.LEAF;
-//                        }
-//                    }
-//                }
-//                case EARTH -> {
-//                    move("minecraft:overworld");
-//                }
-//                case MOON -> {
-//                    move("meteorcraft:moon");
-//                }
-//            }
-//        }));
-//        launchButton.active = false;
+        assert client != null;
+        assert client.player != null;
+
+        addDrawableChild(new TexturedButtonWidget(width / 2 - 12, height / 2 - 12, 25, 25, button("sun"), buttonWidget -> {
+            launchButton.active = true;
+            type = PlanetType.SUN;
+        }));
+        addDrawableChild(new TexturedButtonWidget(width / 2 + 30, height / 2 + 30, 20, 20, button("earth"), buttonWidget -> {
+            launchButton.active = true;
+            System.out.println("earth");
+            type = PlanetType.EARTH;
+        }));
+        addDrawableChild(new TexturedButtonWidget(width / 2 + 55, height / 2 + 45, 15, 15, button("moon"), buttonWidget -> {
+            launchButton.active = true;
+            type = PlanetType.MOON;
+        }));
+
+        launchButton = addDrawableChild(ButtonWidget.builder(Text.translatable("gui.meteorcraft.launch"), buttonWidget -> {
+                    switch (type) {
+                        case NONE -> {
+                        }
+                        case LEAF -> {
+                            client.setScreen(new ConfirmLinkScreen((confirmed) -> {
+                                if (confirmed) {
+                                    Util.getOperatingSystem().open("https://github.com/WintChoco/leaf-mirror/");
+                                }
+
+                                this.client.setScreen(this);
+                            }, "https://github.com/WintChoco/leaf-mirror/", true));
+                        }
+                        case SUN -> {
+                            if (MeteorWorlds.isMoon(client.player.getEntityWorld())) {
+                                if (key == 4) {
+                                    type = PlanetType.LEAF;
+                                }
+                            }
+                        }
+                        case EARTH -> {
+                            move("minecraft:overworld");
+                        }
+                        case MOON -> {
+                            move("meteorcraft:moon");
+                        }
+                    }
+                }).position(width - 105, height - 25).size(100, 20).build());
+        launchButton.active = false;
+    }
+
+    private ButtonTextures button(String planet) {
+        return new ButtonTextures(Identifier.of(MeteorCraft.MOD_ID, "planet/" + planet), Identifier.of(MeteorCraft.MOD_ID, "planet/" + planet + "_focused"));
     }
 
     @Override
@@ -146,7 +153,7 @@ public class RocketScreen extends Screen {
             assert lander != null;
             lander.setTier(tier);
             world.spawnEntity(lander);
-            lander.teleport(0, 5000, 0, false);
+            lander.teleport(world, player.getX(), 5000, player.getZ(), Set.of(), 0, 0, true);
             player.startRiding(lander);
         }
     }
@@ -179,7 +186,7 @@ public class RocketScreen extends Screen {
         private final Text name;
 
         PlanetType(String name) {
-            this.name = Text.of(name);
+            this.name = Text.translatable(name);
         }
 
         public Text getName() {

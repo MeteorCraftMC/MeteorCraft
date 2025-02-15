@@ -19,7 +19,7 @@ public class RocketItem extends Item {
         context.getStack().decrement(1);
         AbstractRocketEntity entity = AbstractRocketEntity.getRocketEntityType(tier).create(context.getWorld(), SpawnReason.SPAWN_ITEM_USE);
         //noinspection ConstantConditions
-        entity.teleport(context.getBlockPos().getX() + 0.5, context.getBlockPos().getY() + 2, context.getBlockPos().getZ() + 0.5, false);
+        entity.requestTeleport(context.getBlockPos().getX() + 0.5, context.getBlockPos().getY() + 2, context.getBlockPos().getZ() + 0.5);
         context.getWorld().spawnEntity(entity);
         return super.useOnBlock(context);
     }
